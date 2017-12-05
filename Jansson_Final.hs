@@ -12,6 +12,7 @@ import RecursiveFunctionsAST
 import RecursiveFunctionsParse
 import Test.Hspec
 import Control.Exception (evaluate,AsyncException(..))
+-- import GHC.Err
 -- Uncomment the following if you choose to do Problem 3.
 {-
 import System.Environment
@@ -51,14 +52,14 @@ eval (If a b c) env                 = let BoolV test = eval a env
                                       in if test then  eval b env else eval c env
 eval (Variable x) env               = fromJust x (lookup x env)
   where fromJust x (Just v)         = v
-        fromJust x Nothing          = errorWithoutStackTrace ("Variable " ++ x ++ " unbound!")
+        fromJust x Nothing          = error ("Variable " ++ x ++ " unbound!")
 eval (Function x body) env          = ClosureV x body env
 -----------------------------------------------------------------
 eval (Declare decls body) env = eval body newEnv         -- This clause needs to be changed. this is the solution if we only have one tuple
-  where vars         = map first decls
-        expressions = map second decls
-        values       = map _ expressions                -- Put eval lamba in underscore
-        newEnv       = zip vars values
+  where vars         = map fst decls                   -- First map should return variables
+        expressions  = map snd decls                  -- Second map should return expressions to be evaluated
+        values       = map (\x -> eval x) expressions                 -- Put eval lamba in underscore (Step 1)
+        newEnv       = zip vars values                   -- Combine variables and values in to list of tuples (Step 2)
 -----------------------------------------------------------------
 eval (RecDeclare x exp body) env    = eval body newEnv
   where newEnv = (x, eval exp newEnv) : env
