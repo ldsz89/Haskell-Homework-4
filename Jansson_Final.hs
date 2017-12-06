@@ -55,11 +55,11 @@ eval (Variable x) env               = fromJust x (lookup x env)
         fromJust x Nothing          = error ("Variable " ++ x ++ " unbound!")
 eval (Function x body) env          = ClosureV x body env
 -----------------------------------------------------------------
-eval (Declare decls body) env = eval body newEnv         -- This clause needs to be changed. this is the solution if we only have one tuple
-  where vars         = map fst decls                   -- First map should return variables
-        expressions  = map snd decls                  -- Second map should return expressions to be evaluated
-        values       = map (\x -> eval x env) expressions                 -- Put eval lamba in underscore (Step 1)
-        newEnv       = zip vars values                -- Combine variables and values in to list of tuples (Step 2)
+eval (Declare decls body) env = eval body newEnv              -- This clause needs to be changed. this is the solution if we only have one tuple
+  where vars         = map fst decls                          -- First map should return variables
+        expressions  = map snd decls                          -- Second map should return expressions to be evaluated
+        values       = map (\x -> eval x env) expressions     -- Put eval lamba in underscore (Step 1)
+        newEnv       = zip vars values ++ env                 -- Combine variables and values in to list of tuples (Step 2)
 
 -----------------------------------------------------------------
 eval (RecDeclare x exp body) env    = eval body newEnv
