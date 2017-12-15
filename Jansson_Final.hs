@@ -83,7 +83,16 @@ when doing the Declare case.
 -}
 
 freeByRule1 :: [String] -> Exp -> [String]
-freeByRule1 = undefined
+freeByRule1 vars expressions = free vars expressions []
+  where
+    free :: [String] -> Exp -> [String] -> [String]
+    free seen (Literal _) acc        = []
+    free seen (Unary _ e) acc        = []
+    free seen (Binary _ e1 e2) acc   = []
+    free seen (If t e1 e2) acc       = []
+    free seen (Variable x) acc       = []
+    free seen (Declare bs body) acc  = undefined
+    free seen (Call e1 e2) acc       = []
 
 freeByRule2 :: [String] -> Exp -> [String]
 freeByRule2 = undefined
@@ -103,3 +112,20 @@ process iline  = do
   repl
    where e = parseExp iline
          v = eval e []
+
+-- Tests
+test_prob1::IO ()
+test_prob1 = hspec $ do
+  describe "" $ do
+    context "1" $ do
+      it "Test exp1" $ do
+        execute exp1 `shouldBe` IntV 11
+    context "" $ do
+      it "Test exp2" $ do
+        execute exp2 `shouldBe` IntV 16
+    context "" $ do
+      it "Test exp3" $ do
+        execute exp3 `shouldBe` IntV 14
+    -- context "" $ do
+    --   it "Test exp4" $ do
+    --     execute exp4 `shouldThrow` anyException
