@@ -86,13 +86,13 @@ freeByRule1 :: [String] -> Exp -> [String]
 freeByRule1 vars expressions = free vars expressions []
   where
     free :: [String] -> Exp -> [String] -> [String]
-    free seen (Literal _) acc        = []
-    free seen (Unary _ e) acc        = []
-    free seen (Binary _ e1 e2) acc   = []
-    free seen (If t e1 e2) acc       = []
-    free seen (Variable x) acc       = []
-    free seen (Declare bs body) acc  = undefined
-    free seen (Call e1 e2) acc       = []
+    free seen (Literal _)       acc        = []
+    free seen (Unary _ e)       acc        = []
+    free seen (Binary _ e1 e2)  acc        = []
+    free seen (If t e1 e2)      acc        = []
+    free seen (Variable x)      acc        = []
+    free seen (Declare bs body) acc        = undefined
+    free seen (Call e1 e2)      acc        = []
 
 freeByRule2 :: [String] -> Exp -> [String]
 freeByRule2 = undefined
